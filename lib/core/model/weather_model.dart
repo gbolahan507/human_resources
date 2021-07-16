@@ -79,6 +79,9 @@ class Current {
     List<Weather> weather;
     Rain rain;
 
+
+    double get getTemp => temp-273.0;
+
     factory Current.fromJson(Map<String, dynamic> json) => Current(
         dt: json["dt"],
         sunrise: json["sunrise"],

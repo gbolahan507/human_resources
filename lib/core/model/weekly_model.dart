@@ -173,6 +173,8 @@ class DailyModel {
   double rain;
   double uvi;
 
+  
+
   factory DailyModel.fromJson(Map<String, dynamic> json) => DailyModel(
         dt: json["dt"],
         sunrise: json["sunrise"],

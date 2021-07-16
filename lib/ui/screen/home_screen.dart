@@ -50,7 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('images/bgimage2.png'))),
+                              image: AssetImage('images/bgimage2.png')
+                              
+                              )),
                       child: SafeArea(
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -113,10 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ],
                                         ),
                                         Spacer(),
-                                        Image.asset(
-                                          'images/raincopy.png',
-                                          width: 50,
-                                        )
+                                      Image.asset(
+                                        model.busy
+                                            ? 'images/rainy2.png'
+                                            : model.weatherModel == null
+                                                ? 'images/rainy2.png'
+                                                : findIcon(
+                                                    '${model.weatherModel.current.weather[0].main}',
+                                                    true),
+                                        width: 50,
+                                      ),
                                       ],
                                     )
                                   ],
@@ -135,8 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ? 'loading...'
                                               : model.weatherModel == null
                                                   ? 'Error'
-                                                  : '${model.weatherModel.current.temp.round()}' +
-                                                      " \u212A",
+                                                  : '${model.weatherModel.current.getTemp.round()}' +
+                                                      " \u2103",
                                           fontSize: 30,
                                           color: Styles.colorWhite,
                                         ),
@@ -160,15 +168,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         Row(
                           children: <Widget>[
                             detailsItem(
-                                context,
-                                'images/tempcopy.png',
-                                'Feels like',
-                                model.busy
-                                    ? 'loading...'
-                                    : model.weatherModel == null
-                                        ? 'Error'
-                                        : '${model.weatherModel.current.temp.round()}' +
-                                            "  \u212A"),
+                              context,
+                              'images/tempcopy.png',
+                              'Feels like',
+                              model.busy
+                                  ? 'loading...'
+                                  : model.weatherModel == null
+                                      ? 'Error'
+                                      : '${model.weatherModel.current.getTemp.round()}' +
+                                          " \u2103",
+                            ),
                             detailsItem(
                               context,
                               'images/humiditycopy.png',
@@ -211,6 +220,50 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               )),
             ));
+  }
+
+
+    String findIcon(String name, bool type) {
+    if (type) {
+      switch (name) {
+        case "Clouds":
+          return "images/cloudcopy.png";
+          break;
+        case "Rain":
+          return "images/rain5.png";
+          break;
+        case "Drizzle":
+          return "images/drizzlecopy.png";
+          break;
+        case "Thunderstorm":
+          return "images/thundercopy.png";
+          break;
+        case "Snow":
+          return "images/snowcopy.png";
+        default:
+          return "images/rainy.png";
+      }
+    } else {
+      switch (name) {
+        case "Clouds":
+          return "images/cloudcopy.png";
+          break;
+        case "Rain":
+          return "images/rain5.png";
+          break;
+        case "Drizzle":
+          return "images/drizzlecopy.png";
+          break;
+        case "Thunderstorm":
+          return "images/thundercopy.png";
+          break;
+        case "Snow":
+          return "images/snowcopy.png";
+          break;
+        default:
+          return "images/rainy.png";
+      }
+    }
   }
 
   String formatter = DateFormat('yMd').format(DateTime.now());

@@ -114,9 +114,15 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                             ),
                                             Spacer(),
                                             Image.asset(
-                                              'images/rainy.png',
-                                              width: 100,
-                                            )
+                                              model.busy
+                                                  ? 'images/rainy2.png'
+                                                  : model.dailyModel == null
+                                                      ? 'images/rainy2.png'
+                                                      : findSingleIcon(
+                                                          '${posts.current.weather[0].main}',
+                                                          true),
+                                              width: 50,
+                                            ),
                                           ],
                                         )
                                       ],
@@ -126,8 +132,8 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                     children: [
                                       CustomText(
                                         snapshot.hasData
-                                            ? '${posts.current.temp.round()}' +
-                                                " \u212A"
+                                            ? '${posts.current.getTemp.round()}' +
+                                                " \u2103"
                                             : 'loading',
                                         fontSize: 20,
                                         color: Styles.colorWhite,
@@ -189,7 +195,7 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                                 ? 'loading...'
                                                 : model.dailyModel == null
                                                     ? 'Error'
-                                                    : '${model.dailyModel[index].temp.max.round() ?? 0}\u00B0',
+                                                    : '${model.dailyModel[index].temp.getmaxTemp.round() ?? 0}\u00B0',
                                             fontSize: 14,
                                             color: Styles.colorBlack,
                                           ),
@@ -199,7 +205,7 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                                 ? 'loading...'
                                                 : model.dailyModel == null
                                                     ? 'Error'
-                                                    : '${model.dailyModel[index].temp.min.round() ?? 0}\u00B0',
+                                                    : '${model.dailyModel[index].temp.getminTemp.round() ?? 0}\u00B0',
                                             fontSize: 14,
                                             color: Styles.colorBlack,
                                           ),
@@ -244,17 +250,13 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
           return "images/rain5.png";
           break;
         case "Drizzle":
-          return "images/rainy.png";
+          return "images/drizzlecopy.png";
           break;
         case "Thunderstorm":
-          return "images/rainy1.png";
+          return "images/thundercopy.png";
           break;
         case "Snow":
-          return "images/rainy2.png";
-          break;
-        case "Snow":
-          return "images/rainy2.png";
-          break;
+          return "images/snowcopy.png";
         default:
           return "images/rainy.png";
       }
@@ -267,16 +269,56 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
           return "images/rain5.png";
           break;
         case "Drizzle":
-          return "images/rainy.png";
+          return "images/drizzlecopy.png";
           break;
         case "Thunderstorm":
-          return "images/rainy.png";
+          return "images/thundercopy.png";
           break;
         case "Snow":
+          return "images/snowcopy.png";
+          break;
+        default:
           return "images/rainy.png";
+      }
+    }
+  }
+
+  String findSingleIcon(String name, bool type) {
+    if (type) {
+      switch (name) {
+        case "Clouds":
+          return "images/cloudcopy.png";
+          break;
+        case "Rain":
+          return "images/rain5.png";
+          break;
+        case "Drizzle":
+          return "images/drizzlecopy.png";
+          break;
+        case "Thunderstorm":
+          return "images/thundercopy.png";
           break;
         case "Snow":
+          return "images/snowcopy.png";
+        default:
           return "images/rainy.png";
+      }
+    } else {
+      switch (name) {
+        case "Clouds":
+          return "images/cloudcopy.png";
+          break;
+        case "Rain":
+          return "images/rain5.png";
+          break;
+        case "Drizzle":
+          return "images/drizzlecopy.png";
+          break;
+        case "Thunderstorm":
+          return "images/thundercopy.png";
+          break;
+        case "Snow":
+          return "images/snowcopy.png";
           break;
         default:
           return "images/rainy.png";
