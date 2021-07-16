@@ -50,9 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('images/bgimage2.png')
-                              
-                              )),
+                              image: AssetImage('images/bgimage2.png'))),
                       child: SafeArea(
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -115,16 +113,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ],
                                         ),
                                         Spacer(),
-                                      Image.asset(
-                                        model.busy
-                                            ? 'images/rainy2.png'
-                                            : model.weatherModel == null
-                                                ? 'images/rainy2.png'
-                                                : findIcon(
-                                                    '${model.weatherModel.current.weather[0].main}',
-                                                    true),
-                                        width: 50,
-                                      ),
+                                        Image.asset(
+                                          model.busy
+                                              ? 'images/rainy2.png'
+                                              : model.weatherModel == null
+                                                  ? 'images/rainy2.png'
+                                                  : findIcon(
+                                                      '${model.weatherModel.current.weather[0].main}',
+                                                      true),
+                                          width: 50,
+                                        ),
                                       ],
                                     )
                                   ],
@@ -144,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               : model.weatherModel == null
                                                   ? 'Error'
                                                   : '${model.weatherModel.current.getTemp.round()}' +
-                                                      " \u2103",
+                                                      "\u00B0",
                                           fontSize: 30,
                                           color: Styles.colorWhite,
                                         ),
@@ -170,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             detailsItem(
                               context,
                               'images/tempcopy.png',
-                              'Feels like',
+                              'Temperature',
                               model.busy
                                   ? 'loading...'
                                   : model.weatherModel == null
@@ -222,8 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ));
   }
 
-
-    String findIcon(String name, bool type) {
+  String findIcon(String name, bool type) {
     if (type) {
       switch (name) {
         case "Clouds":

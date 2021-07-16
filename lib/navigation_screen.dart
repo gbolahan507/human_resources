@@ -12,13 +12,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
     WeeklyScreen(),
-    // Scaffold(),
-    Scaffold(),
   ];
 
   int _selectedIndex = 0;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +42,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.weekend),
                 label: 'Weekly',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.share),
-                label: 'Share',
               ),
             ]));
   }

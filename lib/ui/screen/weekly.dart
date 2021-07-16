@@ -133,7 +133,7 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                       CustomText(
                                         snapshot.hasData
                                             ? '${posts.current.getTemp.round()}' +
-                                                " \u2103"
+                                                " \u00B0"
                                             : 'loading',
                                         fontSize: 20,
                                         color: Styles.colorWhite,
