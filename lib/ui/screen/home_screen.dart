@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseView<WeatherViewModel>(
-        onModelReady: (WeatherViewModel model) => model.getWeather(),
+        onModelReady: (WeatherViewModel model) => model.getWeather2(),
         builder: (_, WeatherViewModel model, __) => SafeArea(
               child: Scaffold(
                   body: Column(
@@ -87,9 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             CustomText(
                                               model.busy
                                                   ? 'loading...'
-                                                  : model.weatherModel == null
+                                                  : model.weathers == null
                                                       ? 'Error'
-                                                      : '${model.weatherModel.timezone}',
+                                                      : '${model.weathers.zone}',
                                               fontSize: 18,
                                               color: Styles.colorWhite,
                                             ),
@@ -104,9 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             CustomText(
                                               model.busy
                                                   ? 'loading...'
-                                                  : model.weatherModel == null
+                                                  : model.weathers == null
                                                       ? 'Error'
-                                                      : '${model.weatherModel.current.weather[0].description}',
+                                                      : '${model.weathers.description}',
                                               fontSize: 12,
                                               color: Styles.colorWhite,
                                             ),
@@ -115,13 +115,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Spacer(),
                                         Image.asset(
                                           model.busy
-                                              ? 'images/rainy2.png'
-                                              : model.weatherModel == null
-                                                  ? 'images/rainy2.png'
+                                              ? 'images/loadingcopy.png'
+                                              : model.weathers == null
+                                                  ? 'images/errorcopy.png'
                                                   : findIcon(
-                                                      '${model.weatherModel.current.weather[0].main}',
+                                                      '${model.weathers.image}',
                                                       true),
-                                          width: 50,
+                                          width: 200,
                                         ),
                                       ],
                                     )
@@ -139,9 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CustomText(
                                           model.busy
                                               ? 'loading...'
-                                              : model.weatherModel == null
+                                              : model.weathers == null
                                                   ? 'Error'
-                                                  : '${model.weatherModel.current.getTemp.round()}' +
+                                                  : '${model.weathers.getTemp.round()}' +
                                                       "\u00B0",
                                           fontSize: 30,
                                           color: Styles.colorWhite,
@@ -171,9 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               'Temperature',
                               model.busy
                                   ? 'loading...'
-                                  : model.weatherModel == null
+                                  : model.weathers == null
                                       ? 'Error'
-                                      : '${model.weatherModel.current.getTemp.round()}' +
+                                      : '${model.weathers.getTemp.round()}' +
                                           " \u2103",
                             ),
                             detailsItem(
@@ -182,9 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               'Humidity',
                               model.busy
                                   ? 'loading...'
-                                  : model.weatherModel == null
+                                  : model.weathers == null
                                       ? 'Error'
-                                      : '${model.weatherModel.current.humidity}%',
+                                      : '${model.weathers.humidity}%',
                             )
                           ],
                         ),
@@ -197,18 +197,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'wind',
                                 model.busy
                                     ? 'loading...'
-                                    : model.weatherModel == null
+                                    : model.weathers == null
                                         ? 'Error'
-                                        : '${model.weatherModel.current.windSpeed}km/h'),
+                                        : '${model.weathers.wind}km/h'),
                             detailsItem(
                               context,
                               'images/uvcopy.png',
                               'UV index',
                               model.busy
                                   ? 'loading...'
-                                  : model.weatherModel == null
+                                  : model.weathers == null
                                       ? 'Error'
-                                      : '${model.weatherModel.current.uvi.round()}',
+                                      : '${model.weathers.uv}',
                             )
                           ],
                         ),

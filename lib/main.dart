@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:human_resources/ui/onboard/splash_screen.dart';
+import 'package:human_resources/ui/screen/home_screen.dart';
+import 'package:human_resources/ui/screen/weekly.dart';
 import 'package:human_resources/util/constant/locator.dart';
 import 'package:human_resources/util/dialog_manager.dart';
 import 'package:human_resources/util/dialog_service.dart';

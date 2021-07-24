@@ -10,11 +10,11 @@ class StartUpViewModel extends BaseModel {
     if (token != null ) {
       hasLoggedIn = true;
       Future<void>.delayed(const Duration(seconds: 2), () {
-        navigate.navigateToReplacing(BottomNavView);
+        navigate.navigateToReplacing(LandPageView);
       });
     } else
       Future<void>.delayed(const Duration(seconds: 2), () {
-        navigate.navigateToReplacing(LandPageView);
+        navigate.navigateToReplacing(BottomNavView);
       });
 
     notifyListeners();

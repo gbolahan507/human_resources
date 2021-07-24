@@ -1,57 +1,62 @@
 import 'package:dio/dio.dart';
 import 'package:human_resources/core/api/base_api.dart';
-import 'package:human_resources/core/model/error_model.dart';
-import 'package:human_resources/core/model/weather_model.dart';
-import 'package:human_resources/core/model/weekly.dart';
-import 'package:human_resources/core/model/weekly_model.dart';
-import 'package:human_resources/util/constant/messages.dart';
-import 'package:human_resources/util/error/custom_exception.dart';
-import 'package:human_resources/util/error/error_util.dart';
+import 'package:human_resources/core/model/weather.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+
+
 
 class WeatherApi extends BaseAPI {
   Logger log = Logger();
 
-  List<WeeklyWeather> sevendays;
-
-  WeatherModel weatherModel;
   DateTime date = DateTime.now();
 
-  Future<WeatherModel> getWeather() async {
+  Future<Weathers> getWeather2() async {
     try {
-      var response = await Dio().get("$baseUrl", options: defaultOptions);
+      Response<Map> response =
+          await Dio().get("$baseUrl", options: defaultOptions);
       log.d(response.statusCode);
-      switch (response.statusCode) {
-        case SERVER_OKAY:
-          return WeatherModel.fromJson(response.data);
-          break;
-        default:
-          throw ErrorModel.fromJson(response.data).cod;
-          break;
+      if (response.statusCode == 200) {
+        var res = response.data;
+        var current = res;
+        print(current);
+        Weathers currentTemp = Weathers(
+          zone: current["timezone"],
+          description: current["current"]['weather'][0]["description"],
+          current: current["current"]["temp"]?.round() ?? 0,
+          humidity: current["current"]["humidity"],
+          wind: current["current"]["wind_speed"],
+          uv: current["current"]["uvi"],
+          image: current["current"]["weather"][0]["main"].toString(),
+        );
+        return currentTemp;
       }
-    } catch (e) {
-      throw CustomException(DioErrorUtil.handleError(e));
-    }
+    } catch (e) {}
+    return null;
   }
 
-  Future<List<DailyModel>> getsevendaysWeather() async {
-    List<DailyModel> data = <DailyModel>[];
+  Future<List> getsevendaysWeather2() async {
+    List<Weathers> sevenDay = [];
     try {
       var response = await Dio().get("$baseUrl", options: defaultOptions);
-      log.d(response.statusCode);
-
       if (response.statusCode == 200) {
-        data = (response.data["daily"] as List)
-            .map((e) => DailyModel.fromJson(e))
-            .toList();
-
-        // data.removeLast();
-        return data;
-      } else {
-        throw ErrorModel.fromJson(response.data).cod;
+        for (var i = 1; i < 8; i++) {
+          String day = DateFormat("EEEE")
+              .format(DateTime(date.year, date.month, date.day + i + 1))
+              .substring(0, 3);
+          var res = response.data;
+          var daily = res["daily"][i];
+          var hourly = Weathers(
+              max: daily["temp"]["max"]?.round() ?? 0,
+              min: daily["temp"]["min"]?.round() ?? 0,
+              image: daily["weather"][0]["main"].toString(),
+              description: daily["weather"][0]["description"].toString(),
+              day: day);
+          sevenDay.add(hourly);
+        }
+        return sevenDay;
       }
-    } catch (e) {
-      throw CustomException(DioErrorUtil.handleError(e));
-    }
+    } catch (e) {}
+    return null;
   }
 }

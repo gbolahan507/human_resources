@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:human_resources/core/api/weather_api.dart';
-import 'package:human_resources/core/model/weather_model.dart';
+import 'package:human_resources/core/model/weather.dart';
 import 'package:human_resources/core/view_model/weather_view_model.dart';
 import 'package:human_resources/util/constant/base_view.dart';
 import 'package:human_resources/widgets/export.dart';
@@ -17,27 +17,27 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
   WeatherViewModel model;
   WeatherApi weatherApi;
   Future futureweather;
-  WeatherModel weatherModel;
+  Weathers weathers;
   final now = new DateTime.now();
 
   DateTime date = DateTime.now();
 
-  getWeatherResponse(WeatherModel weatherModel) async {
-    return await weatherApi.getWeather();
+  getWeatherResponse(Weathers weathers) async {
+    return await weatherApi.getWeather2();
   }
 
   @override
   void initState() {
     model = WeatherViewModel();
     weatherApi = WeatherApi();
-    futureweather = getWeatherResponse(weatherModel);
+    futureweather = getWeatherResponse(weathers);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseView<WeatherViewModel>(
-        onModelReady: (WeatherViewModel model) => model.getsevendaysWeather(),
+        onModelReady: (WeatherViewModel model) => model.getsevendaysWeather2(),
         builder: (_, WeatherViewModel model, __) => SafeArea(
               child: Scaffold(
                   body: Column(
@@ -54,7 +54,7 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                         child: FutureBuilder(
                           future: futureweather,
                           builder: (context, snapshot) {
-                            final WeatherModel posts = snapshot.data;
+                            final Weathers posts = snapshot.data;
                             return Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: Column(
@@ -89,14 +89,13 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                               children: [
                                                 CustomText(
                                                   snapshot.hasData
-                                                      ? '${posts.timezone}'
+                                                      ? '${posts.zone}'
                                                       : 'loading',
                                                   fontSize: 18,
                                                   color: Styles.colorWhite,
                                                 ),
                                                 verticalSpaceTiny,
                                                 CustomText(
-                                                  // getco(),
                                                   formatter,
                                                   fontSize: 10,
                                                   color: Styles.colorWhite,
@@ -105,7 +104,7 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                                 verticalSpaceTiny,
                                                 CustomText(
                                                   snapshot.hasData
-                                                      ? '${posts.current.weather[0].description}'
+                                                      ? '${posts.description}'
                                                       : 'loading',
                                                   fontSize: 12,
                                                   color: Styles.colorWhite,
@@ -114,14 +113,11 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                             ),
                                             Spacer(),
                                             Image.asset(
-                                              model.busy
-                                                  ? 'images/rainy2.png'
-                                                  : model.dailyModel == null
-                                                      ? 'images/rainy2.png'
-                                                      : findSingleIcon(
-                                                          '${posts.current.weather[0].main}',
-                                                          true),
-                                              width: 50,
+                                              snapshot.hasData
+                                                  ? findSingleIcon(
+                                                      '${posts.image}', true)
+                                                  : 'images/rainy2.png',
+                                              width: 200,
                                             ),
                                           ],
                                         )
@@ -132,7 +128,7 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                                     children: [
                                       CustomText(
                                         snapshot.hasData
-                                            ? '${posts.current.getTemp.round()}' +
+                                            ? '${posts.getTemp.round()}' +
                                                 " \u00B0"
                                             : 'loading',
                                         fontSize: 20,
@@ -149,90 +145,89 @@ class _WeeklyScreenState extends State<WeeklyScreen> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      child: ListView(
-                        children: [
-                          ListView.builder(
-                            itemCount: 7 ?? 0,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                padding: EdgeInsets.only(
-                                    top: 10, left: 20, right: 20),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: Image.asset(
-                                        model.busy
-                                            ? 'images/rainy2.png'
-                                            : model.dailyModel == null
-                                                ? 'images/rainy2.png'
-                                                : findIcon(
-                                                    '${model.dailyModel[index].weather[0].main}',
-                                                    index,
-                                                    true),
-                                        width: 50,
-                                      ),
+                  Container(
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          itemCount: model.dailyModelweathers?.length ?? 0,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding:
+                                  EdgeInsets.only(top: 10, left: 20, right: 20),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Image.asset(
+                                      model.busy
+                                          ? 'images/loadingcopy.png'
+                                          : model.dailyModelweathers == null
+                                              ? 'images/errorcopy.png'
+                                              : findIcon(
+                                                  '${model.dailyModelweathers[index].image}',
+                                                  index,
+                                                  true),
+                                      width: 50,
                                     ),
-                                    horizontalSpaceMedium,
-                                    Expanded(
-                                        flex: 3,
-                                        child: CustomText(
-                                          days(index),
+                                  ),
+                                  horizontalSpaceMedium,
+                                  Expanded(
+                                      flex: 3,
+                                      child: CustomText(
+                                        days(index),
+                                        fontSize: 14,
+                                        color: Styles.colorBlack,
+                                      )),
+                                  horizontalSpaceMedium,
+                                  Expanded(
+                                    flex: 15,
+                                    child: Row(
+                                      children: [
+                                        CustomText(
+                                          model.busy
+                                              ? 'loading...'
+                                              : model.dailyModelweathers == null
+                                                  ? 'Error'
+                                                  : '${model.dailyModelweathers[index].getmaxTemp.round() ?? 0}\u00B0',
                                           fontSize: 14,
                                           color: Styles.colorBlack,
-                                        )),
-                                    horizontalSpaceMedium,
-                                    Expanded(
-                                      flex: 15,
-                                      child: Row(
-                                        children: [
-                                          CustomText(
+                                        ),
+                                        CustomText('/'),
+                                        CustomText(
+                                          model.busy
+                                              ? 'loading...'
+                                              : model.dailyModelweathers == null
+                                                  ? 'Error'
+                                                  : '${model.dailyModelweathers[index].getminTemp.round() ?? 0}\u00B0',
+                                          fontSize: 14,
+                                          color: Styles.colorBlack,
+                                        ),
+                                        horizontalSpaceMedium,
+                                        Expanded(
+                                          child: Text(
                                             model.busy
                                                 ? 'loading...'
-                                                : model.dailyModel == null
+                                                : model.dailyModelweathers ==
+                                                        null
                                                     ? 'Error'
-                                                    : '${model.dailyModel[index].temp.getmaxTemp.round() ?? 0}\u00B0',
-                                            fontSize: 14,
-                                            color: Styles.colorBlack,
+                                                    : '${model.dailyModelweathers[index].description}',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(),
                                           ),
-                                          CustomText('/'),
-                                          CustomText(
-                                            model.busy
-                                                ? 'loading...'
-                                                : model.dailyModel == null
-                                                    ? 'Error'
-                                                    : '${model.dailyModel[index].temp.getminTemp.round() ?? 0}\u00B0',
-                                            fontSize: 14,
-                                            color: Styles.colorBlack,
-                                          ),
-                                          horizontalSpaceMedium,
-                                          Expanded(
-                                            child: Text(
-                                              model.busy
-                                                  ? 'loading...'
-                                                  : model.dailyModel == null
-                                                      ? 'Error'
-                                                      : '${model.dailyModel[index].weather[0].description}',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          verticalSpaceMedium,
-                        ],
-                      ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        verticalSpaceMedium,
+                      ],
                     ),
                   ),
                 ],

@@ -30,7 +30,7 @@ class LandPageScreen extends StatelessWidget {
                     height: 50,
                     title: 'Next',
                     onPressed: () {
-                      routeTo(context, NavigationScreen());
+                      routeToReplace(context, NavigationScreen());
                     },
                   ),
                 ),

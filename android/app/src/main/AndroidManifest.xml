@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.human_resources">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
    <application
         android:label="human_resources"
         android:icon="@mipmap/ic_launcher">
